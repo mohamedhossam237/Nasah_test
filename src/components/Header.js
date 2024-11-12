@@ -1,7 +1,7 @@
 // src/components/Header.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaGlobe } from 'react-icons/fa';
+import { FaGlobe, FaBars } from 'react-icons/fa';
 import { IoMdPerson } from 'react-icons/io';
 
 const HeaderContainer = styled.header`
@@ -18,6 +18,10 @@ const HeaderMain = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const LogoContainer = styled.div`
@@ -54,6 +58,19 @@ const Navigation = styled.nav`
     display: flex;
     gap: 2rem;
 
+    @media (max-width: 768px) {
+      display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+      flex-direction: column;
+      position: absolute;
+      top: 70px;
+      right: 0;
+      background: #ffffff;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+
     li a {
       text-decoration: none;
       color: #333333;
@@ -74,6 +91,10 @@ const HeaderActions = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
 `;
 
 const LanguageSwitcher = styled.div`
@@ -112,42 +133,59 @@ const Icon = styled.div`
   }
 `;
 
+const MenuToggle = styled.div`
+  display: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
 // Header Component
 const Header = () => {
   const [isEnglish, setIsEnglish] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleLanguage = () => {
     setIsEnglish(!isEnglish);
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <>
-      <HeaderContainer>
-        <HeaderMain>
-          <LogoContainer>
-            <LogoCircle>C</LogoCircle>
-            <LogoText>coca</LogoText>
-          </LogoContainer>
-          <Navigation>
-            <ul>
-              <li><a href="#home">Home</a></li>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#lawfirm">Law Firm</a></li>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#community">Community</a></li>
-              <li><a href="#contact">Contact Us</a></li>
-            </ul>
-          </Navigation>
-          <HeaderActions>
-            <Icon as={IoMdPerson} />
-            <LanguageSwitcher isEnglish={isEnglish} onClick={toggleLanguage}>
-              <FaGlobe style={{ marginRight: '5px' }} />
-              {isEnglish ? "EN" : "AR"}
-            </LanguageSwitcher>
-          </HeaderActions>
-        </HeaderMain>
-      </HeaderContainer>
-    </>
+    <HeaderContainer>
+      <HeaderMain>
+        <LogoContainer>
+          <LogoCircle>C</LogoCircle>
+          <LogoText>coca</LogoText>
+        </LogoContainer>
+        <Navigation isOpen={isMenuOpen}>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#lawfirm">Law Firm</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#community">Community</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+          </ul>
+        </Navigation>
+        <HeaderActions>
+          <Icon as={IoMdPerson} />
+          <LanguageSwitcher isEnglish={isEnglish} onClick={toggleLanguage}>
+            <FaGlobe style={{ marginRight: '5px' }} />
+            {isEnglish ? "EN" : "AR"}
+          </LanguageSwitcher>
+          <MenuToggle onClick={toggleMenu}>
+            <FaBars />
+          </MenuToggle>
+        </HeaderActions>
+      </HeaderMain>
+    </HeaderContainer>
   );
 };
 
